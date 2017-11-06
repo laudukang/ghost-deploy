@@ -3,27 +3,31 @@
 
 Vagrant.configure("2") do |config|
 
-  ## common config
-  base_path = "D:/git/ghost-deploy"
-  data_base_path = "D:/git/ghost-deploy/data"
-  default_box = "ubuntu64"
-  # default_box = "ubuntu/xenial64"
+  #################### common machine config start ####################
+  base_path = "D:/git/ghost-deploy/"
+  base_data_path = "#{base_path}data/"
+  boot_up_message = ", hi laudukang"
+  base_network_segment = "172.28.128."
+  vagrant_home_path = "C:/Users/lau/.vagrant.d/"
+
+  default_box = "ubuntu/xenial64"
   default_box_url = "https://vagrantcloud.com/ubuntu/boxes/xenial64/versions/20171028.0.0/providers/virtualbox.box"
   box_check_update = false
   sources_list_path = "/tmp/aliyun_sources.list"
   temp_ssh_folder_path = "/tmp/tempssh"
   temp_id_rsa_path = "/tmp/id_rsa"
-  boot_up_message = ", hi laudukang"
-  # , autostart: false
+  #, autostart: false
+  #################### common machine config end ####################
 
-  config.vm.define "kibana" do |machine|
-    hostname = "kibana"
+  #################### machine config start ####################
+  config.vm.define "lab", autostart: false do |machine|
+    hostname = "lab"
     machine.vm.box = default_box
     machine.vm.box_url = default_box_url
     machine.vm.hostname = hostname
     machine.vm.post_up_message = "#{hostname}#{boot_up_message}"
-    machine.vm.network "private_network", ip: "172.28.128.10"
-
+    machine.vm.network "private_network", ip: "#{base_network_segment}10"
+    machine.ssh.private_key_path = ["#{vagrant_home_path}insecure_private_key", "#{base_data_path}key/local_key"]
 
     config.vm.provider :virtualbox do |vb|
       vb.name = hostname
@@ -35,15 +39,16 @@ Vagrant.configure("2") do |config|
       SHELL
     end
   end
+  #################### machine config end ####################
 
-  config.vm.define "elasticsearch" do |machine|
+  #################### machine config start ####################
+  config.vm.define "elasticsearch", autostart: false do |machine|
     hostname = "elasticsearch"
     machine.vm.box = default_box
     machine.vm.box_url = default_box_url
     machine.vm.hostname = hostname
     machine.vm.post_up_message = "#{hostname}#{boot_up_message}"
-    machine.vm.network "private_network", ip: "172.28.128.11"
-
+    machine.vm.network "private_network", ip: "#{base_network_segment}11"
 
     config.vm.provider :virtualbox do |vb|
       vb.name = hostname
@@ -55,26 +60,28 @@ Vagrant.configure("2") do |config|
       SHELL
     end
   end
+  #################### machine config end ####################
 
-  # global config start
+  #################### global machine config start ####################
   config.vm.provider :virtualbox do |vb|
     vb.gui = false
     vb.memory = "1024"
     vb.cpus = 1
   end
 
+  config.vm.box_url = "#{default_box_url}"
   config.vm.synced_folder ".", "/vagrant", disabled: true
-  config.vm.provision "file", source: "#{data_base_path}/aliyun_sources.list", destination: "#{sources_list_path}"
-  config.vm.provision "file", source: "#{data_base_path}/ssh/.", destination: "#{temp_ssh_folder_path}"
-  config.vm.provision "file", source: "#{data_base_path}/key/local_key", destination: "#{temp_id_rsa_path}"
+  config.vm.provision "file", source: "#{base_data_path}aliyun_sources.list", destination: "#{sources_list_path}"
+  config.vm.provision "file", source: "#{base_data_path}ssh/.", destination: "#{temp_ssh_folder_path}"
+  config.vm.provision "file", source: "#{base_data_path}key/local_key", destination: "#{temp_id_rsa_path}"
 
   config.ssh.forward_agent    = true
   config.ssh.insert_key       = false
-  config.ssh.private_key_path =  ["#{data_base_path}/key/local_key"] #"C:/Users/lau/.vagrant.d/insecure_private_key",
+  config.ssh.private_key_path = ["#{base_data_path}key/local_key", "#{vagrant_home_path}insecure_private_key"]
 
   config.vm.provision :shell, privileged: false do |s|
-    ssh_key = File.readlines("#{data_base_path}/key/local_key").first.strip
-    ssh_pub_key = File.readlines("#{data_base_path}/key/local_key.pub").first.strip
+    ssh_key = File.readlines("#{base_data_path}key/local_key").first.strip
+    ssh_pub_key = File.readlines("#{base_data_path}key/local_key.pub").first.strip
     s.inline = <<-SHELL
       echo #{ssh_pub_key} >> /home/ubuntu/.ssh/authorized_keys
       sudo bash -c "echo #{ssh_pub_key} >> /root/.ssh/authorized_keys"
@@ -103,6 +110,6 @@ Vagrant.configure("2") do |config|
       echo "shell init done"
     SHELL
   end
-  # global config end
+  #################### global machine config end ####################
 
 end
