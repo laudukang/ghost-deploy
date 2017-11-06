@@ -27,7 +27,6 @@ Vagrant.configure("2") do |config|
     machine.vm.hostname = hostname
     machine.vm.post_up_message = "#{hostname}#{boot_up_message}"
     machine.vm.network "private_network", ip: "#{base_network_segment}10"
-    machine.ssh.private_key_path = ["#{vagrant_home_path}insecure_private_key", "#{base_data_path}key/local_key"]
 
     config.vm.provider :virtualbox do |vb|
       vb.name = hostname
