@@ -9,6 +9,7 @@ Vagrant.configure("2") do |config|
   boot_up_message = ", hi laudukang"
   base_network_segment = "172.28.128."
   vagrant_home_path = "C:/Users/lau/.vagrant.d/"
+  NODE_COUNT = 2
 
   default_box = "ubuntu/xenial64"
   default_box_url = "https://vagrantcloud.com/ubuntu/boxes/xenial64/versions/20171028.0.0/providers/virtualbox.box"
@@ -60,6 +61,31 @@ Vagrant.configure("2") do |config|
     end
   end
   #################### machine config end ####################
+
+
+  #################### batch config node start ####################
+  # (1..NODE_COUNT).each do |i|
+  #   config.vm.define "node#{i}" do |machine|
+  #     hostname = "node#{i}"
+  #     machine.vm.box = default_box
+  #     machine.vm.box_url = default_box_url
+  #     machine.vm.hostname = hostname
+  #     machine.vm.post_up_message = "#{hostname}#{boot_up_message}"
+  #     machine.vm.network "private_network", ip: "#{base_network_segment}#{i + 30}"
+  #
+  #     config.vm.provider :virtualbox do |vb|
+  #       vb.name = hostname
+  #     end
+  #
+  #     machine.vm.provision :shell, privileged: false do |s|
+  #       s.inline = <<-SHELL
+  #         echo "#{hostname} shell init done"
+  #       SHELL
+  #     end
+  #   end
+  # end
+  #################### batch config node end ####################
+
 
   #################### global machine config start ####################
   config.vm.provider :virtualbox do |vb|
