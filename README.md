@@ -2,8 +2,8 @@
 One command to start your lab enviroment
 
 ## Install Requirement
-- [Vagrant](https://www.vagrantup.com/)
-- [Virtualbox](https://www.virtualbox.org/)
+- [Vagrant 2.0.0+](https://www.vagrantup.com/)
+- [Virtualbox 5.1](https://www.virtualbox.org/), [VirtualBox 5.2.0 is not supported for Vagrant 2.0.0](https://github.com/hashicorp/vagrant/issues/9075), [Virtualbox 5.2 support](https://github.com/hashicorp/vagrant/pull/8955)
 
 ## Feature
 - User`ubuntu` and `root`can ssh machine with `data\key\local_key`
@@ -63,6 +63,8 @@ vagrant destroy -f
 vagrant suspend lab
 
 vagrant resume lab
+
+vagrant halt
 
 ssh root@172.28.128.10
 ```
