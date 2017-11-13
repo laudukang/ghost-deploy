@@ -107,6 +107,7 @@ Vagrant.configure("2") do |config|
   config.vm.provision :shell, privileged: false do |s|
     ssh_key = File.readlines("#{base_data_path}key/local_key").first.strip
     ssh_pub_key = File.readlines("#{base_data_path}key/local_key.pub").first.strip
+    user_password = File.readlines("#{base_data_path}user_password").first.strip
     s.inline = <<-SHELL
       echo #{ssh_pub_key} >> /home/ubuntu/.ssh/authorized_keys
       sudo bash -c "echo #{ssh_pub_key} >> /root/.ssh/authorized_keys"
@@ -131,6 +132,8 @@ Vagrant.configure("2") do |config|
       sudo bash -c "chmod 600 /etc/ssh/ssh_host_*key"
       sudo bash -c "chmod 644 /etc/ssh/ssh_host_*key.pub"
       sudo service ssh restart
+
+      sudo echo #{user_password} | sudo chpasswd
 
       echo "shell init done"
     SHELL
