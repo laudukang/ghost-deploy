@@ -26,11 +26,11 @@ Host key verification failed.
 ```
 
 ## Config Guidance
-- ~~change your `base_path` in `Vagrantfile`, **required**~~
-- change your `base_network_segment` in `Vagrantfile`, **optional**
-- ~~change your `vagrant_home_path` in `Vagrantfile`, **required**~~
+- ~~update your `base_path` in `Vagrantfile`, **required**~~
+- update your `base_network_segment` in `Vagrantfile`, **optional**
+- ~~update your `vagrant_home_path` in `Vagrantfile`, **required**~~
 - generate your local key by `ssh-keygen -t rsa` and paste it into `data\key\local_key` and `data\key\local_key.pub`, **required**
-- change your `boot_up_message` in `Vagrantfile`, **optional**
+- update your `boot_up_message` in `Vagrantfile`, **optional**
 - update user passord in `data\user_password`, **optional**
 - copy machine config template and modify your own machie name like `lab`, `Vagrantfile` has init `lab` and `elasticsearch` default machine config, **optional**
 ```ruby
