@@ -6,9 +6,9 @@ One command to start your lab enviroment
 - [Virtualbox 5.1](https://www.virtualbox.org/), [VirtualBox 5.2.0 is not supported for Vagrant 2.0.0](https://github.com/hashicorp/vagrant/issues/9075), [Virtualbox 5.2 support](https://github.com/hashicorp/vagrant/pull/8955)
 
 ## Feature
-- User`ubuntu` and `root`can ssh machine with `data\key\local_key`
-- Set user's password in `data\user_password`, pattern `username:password`, default `root:root` and `ubuntu:ubuntu`
-- As use same config OpenSSH Host Keys, ssh a rebuilded machine will not show message bellow
+- user`ubuntu` and `root`can ssh machine with `data\key\local_key`
+- set user's password in `data\user_password`, pattern `username:password`, default `root:root` and `ubuntu:ubuntu`
+- as use same config OpenSSH Host Keys, ssh a rebuilded machine will not show message bellow
 ```
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 @    WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!     @
@@ -26,12 +26,13 @@ Host key verification failed.
 ```
 
 ## Config Guidance
-- change your `base_path` in `Vagrantfile`, **required**
-- change your `base_network_segment` in `Vagrantfile`, **required**
-- change your `vagrant_home_path` in `Vagrantfile`, **required**
+- ~~change your `base_path` in `Vagrantfile`, **required**~~
+- change your `base_network_segment` in `Vagrantfile`, **optional**
+- ~~change your `vagrant_home_path` in `Vagrantfile`, **required**~~
 - generate your local key by `ssh-keygen -t rsa` and paste it into `data\key\local_key` and `data\key\local_key.pub`, **required**
 - change your `boot_up_message` in `Vagrantfile`, **optional**
-- copy machine config template and modify your own machie name like `lab`, `Vagrantfile` has init `lab` and `elasticsearch` default machine config
+- update user passord in `data\user_password`, **optional**
+- copy machine config template and modify your own machie name like `lab`, `Vagrantfile` has init `lab` and `elasticsearch` default machine config, **optional**
 ```ruby
 #################### machine config start ####################
   config.vm.define "lab", autostart: false do |machine|

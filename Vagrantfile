@@ -4,11 +4,10 @@
 Vagrant.configure("2") do |config|
 
   #################### common machine config start ####################
-  base_path = "D:/git/ghost-deploy/"
+  base_path = "./"
   base_data_path = "#{base_path}data/"
   boot_up_message = ", hi laudukang"
   base_network_segment = "172.28.128."
-  vagrant_home_path = "C:/Users/lau/.vagrant.d/"
   NODE_COUNT = 2
 
   default_box = "ubuntu/xenial64"
@@ -102,7 +101,7 @@ Vagrant.configure("2") do |config|
 
   config.ssh.forward_agent    = true
   config.ssh.insert_key       = false
-  config.ssh.private_key_path = ["#{base_data_path}key/local_key", "#{vagrant_home_path}insecure_private_key"]
+  config.ssh.private_key_path = ["#{base_data_path}key/local_key"]
 
   config.vm.provision :shell, privileged: false do |s|
     ssh_key = File.readlines("#{base_data_path}key/local_key").first.strip
