@@ -26,11 +26,12 @@ Host key verification failed.
 ```
 
 ## Config Guidance
-- ~~update your `base_path` in `Vagrantfile`, **required**~~
-- update your `base_network_segment` in `Vagrantfile`, **optional**
-- ~~update your `vagrant_home_path` in `Vagrantfile`, **required**~~
-- generate your local key by `ssh-keygen -t rsa` and paste it into `data\key\local_key` and `data\key\local_key.pub`, **required**
-- update your `boot_up_message` in `Vagrantfile`, **optional**
+- ~~update `base_path` in `Vagrantfile`, **required**~~
+- update `base_private_network_segment` in `Vagrantfile`, **optional**
+- update `base_public_network_segment` in `Vagrantfile`, **optional**
+- ~~update `vagrant_home_path` in `Vagrantfile`, **required**~~
+- generate local key by `ssh-keygen -t rsa` and paste it into `data\key\local_key` and `data\key\local_key.pub`, **required**
+- update `boot_up_message` in `Vagrantfile`, **optional**
 - update user passord in `data\user_password`, **optional**
 - copy machine config template and modify your own machie name like `lab`, `Vagrantfile` has init `lab` and `elasticsearch` default machine config, **optional**
 ```ruby
@@ -42,6 +43,7 @@ Host key verification failed.
     machine.vm.hostname = hostname
     machine.vm.post_up_message = "#{hostname}#{boot_up_message}"
     machine.vm.network "private_network", ip: "#{base_network_segment}10"
+    # machine.vm.network "public_network", ip: "#{base_public_network_segment}78" #, bridge: "Killer Wireless-n/a/ac 1535 Wireless Network Adapter"
 
     config.vm.provider :virtualbox do |vb|
       vb.name = hostname

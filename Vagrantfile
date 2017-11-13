@@ -7,7 +7,8 @@ Vagrant.configure("2") do |config|
   base_path = "./"
   base_data_path = "#{base_path}data/"
   boot_up_message = ", hi laudukang"
-  base_network_segment = "172.28.128."
+  base_private_network_segment = "172.28.128."
+  base_public_network_segment  = "10.10.204."
   NODE_COUNT = 2
 
   default_box = "ubuntu/xenial64"
@@ -26,7 +27,8 @@ Vagrant.configure("2") do |config|
     machine.vm.box_url = default_box_url
     machine.vm.hostname = hostname
     machine.vm.post_up_message = "#{hostname}#{boot_up_message}"
-    machine.vm.network "private_network", ip: "#{base_network_segment}10"
+    machine.vm.network "private_network", ip: "#{base_private_network_segment}10"
+    # machine.vm.network "public_network", ip: "#{base_public_network_segment}78"
 
     config.vm.provider :virtualbox do |vb|
       vb.name = hostname
@@ -41,13 +43,13 @@ Vagrant.configure("2") do |config|
   #################### machine config end ####################
 
   #################### machine config start ####################
-  config.vm.define "elasticsearch", autostart: false do |machine|
+  config.vm.define "es", autostart: false do |machine|
     hostname = "elasticsearch"
     machine.vm.box = default_box
     machine.vm.box_url = default_box_url
     machine.vm.hostname = hostname
     machine.vm.post_up_message = "#{hostname}#{boot_up_message}"
-    machine.vm.network "private_network", ip: "#{base_network_segment}11"
+    machine.vm.network "private_network", ip: "#{base_private_network_segment}11"
 
     config.vm.provider :virtualbox do |vb|
       vb.name = hostname
@@ -70,7 +72,7 @@ Vagrant.configure("2") do |config|
   #     machine.vm.box_url = default_box_url
   #     machine.vm.hostname = hostname
   #     machine.vm.post_up_message = "#{hostname}#{boot_up_message}"
-  #     machine.vm.network "private_network", ip: "#{base_network_segment}#{i + 30}"
+  #     machine.vm.network "private_network", ip: "#{base_private_network_segment}#{i + 30}"
   #
   #     config.vm.provider :virtualbox do |vb|
   #       vb.name = hostname
@@ -91,6 +93,8 @@ Vagrant.configure("2") do |config|
     vb.gui = false
     vb.memory = "1024"
     vb.cpus = 1
+    vb.customize ["modifyvm", :id, "--nictype1", "Am79C973"]
+    vb.customize ["modifyvm", :id, "--nictype2", "Am79C973"]
   end
 
   config.vm.box_url = "#{default_box_url}"
