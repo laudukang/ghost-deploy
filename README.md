@@ -7,6 +7,7 @@ One command to start your lab enviroment
 
 ## Feature
 - User`ubuntu` and `root`can ssh machine with `data\key\local_key`
+- Set user's password in `data\user_password`, pattern `username:password`, default `root:root` and `ubuntu:ubuntu`
 - As use same config OpenSSH Host Keys, ssh a rebuilded machine will not show message bellow
 ```
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
