@@ -28,7 +28,7 @@ Vagrant.configure("2") do |config|
     machine.vm.hostname = hostname
     machine.vm.post_up_message = "#{hostname}#{boot_up_message}"
     machine.vm.network "private_network", ip: "#{base_private_network_segment}10"
-    # machine.vm.network "public_network", ip: "#{base_public_network_segment}78"
+    machine.vm.network "public_network", ip: "#{base_public_network_segment}78"
 
     config.vm.provider :virtualbox do |vb|
       vb.name = hostname
@@ -95,6 +95,7 @@ Vagrant.configure("2") do |config|
     vb.cpus = 1
     vb.customize ["modifyvm", :id, "--nictype1", "Am79C973"]
     vb.customize ["modifyvm", :id, "--nictype2", "Am79C973"]
+    vb.customize ["modifyvm", :id, "--nictype3", "Am79C973"]
   end
 
   config.vm.box_url = "#{default_box_url}"
