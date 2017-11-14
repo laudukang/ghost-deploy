@@ -8,6 +8,7 @@ One command to start your lab enviroment
 ## Feature
 - user`ubuntu` and `root`can ssh machine with `data\key\local_key`
 - set user's password in `data\user_password`, pattern `username:password`, default `root:root` and `ubuntu:ubuntu`
+- machine with aliyun source
 - as use same config OpenSSH Host Keys, ssh a rebuilded machine will not show message bellow
 ```
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -32,7 +33,7 @@ Host key verification failed.
 - ~~update `vagrant_home_path` in `Vagrantfile`, **required**~~
 - generate local key by `ssh-keygen -t rsa` and paste it into `data\key\local_key` and `data\key\local_key.pub`, **required**
 - update `boot_up_message` in `Vagrantfile`, **optional**
-- update user passord in `data\user_password`, **optional**
+- config user password in `data\user_password`, pattern `username:password` each line, **optional**
 - copy machine config template and modify your own machie name like `lab`, `Vagrantfile` has init `lab` and `elasticsearch` default machine config, **optional**
 ```ruby
 #################### machine config start ####################
