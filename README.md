@@ -9,6 +9,7 @@ One command to start your lab enviroment
 - user`ubuntu` and `root`can ssh machine with `data\key\local_key`
 - set user's password in `data\user_password`, pattern `username:password`, default `root:root` and `ubuntu:ubuntu`
 - machine with aliyun source
+- ~~set google dns in `/etc/resolvconf/resolv.conf.d/base`~~
 - as use same config OpenSSH Host Keys, ssh a rebuilded machine will not show message bellow
 ```
 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -72,4 +73,22 @@ vagrant resume lab
 vagrant halt
 
 ssh root@172.28.128.10
+```
+
+## [Virtual networking hardware](https://www.virtualbox.org/manual/ch06.html)
+  - AMD PCNet PCI II (Am79C970A);
+  - AMD PCNet FAST III (Am79C973, the default);
+  - Intel PRO/1000 MT Desktop (82540EM);
+  - Intel PRO/1000 T Server (82543GC);
+  - Intel PRO/1000 MT Server (82545EM);
+  - Paravirtualized network adapter (virtio).
+
+## [Vagrant Documentation](https://www.vagrantup.com/docs/)
+
+
+## Virtualbox Customize
+```
+"--nictype1", "Am79C973"
+"--nicpromisc1", "allow-all"
+"--nic1", "intnet"
 ```
