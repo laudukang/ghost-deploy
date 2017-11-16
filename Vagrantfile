@@ -8,11 +8,12 @@ Vagrant.configure("2") do |config|
   base_data_path = "#{base_path}data/"
   boot_up_message = ", hi laudukang"
   base_private_network_segment = "172.28.128."
-  base_public_network_segment  = "10.10.204."
-  NODE_COUNT = 2
+  base_public_network_segment  = "10.10.201."
 
   default_box = "ubuntu/xenial64"
-  default_box_url = "https://vagrantcloud.com/ubuntu/boxes/xenial64/versions/20171028.0.0/providers/virtualbox.box"
+  default_box_url = "http://cloud-images.ubuntu.com/xenial/current/xenial-server-cloudimg-amd64-vagrant.box"
+  # default_box = "ubuntu/xenial32"
+  # default_box_url = "http://cloud-images.ubuntu.com/xenial/current/xenial-server-cloudimg-i386-vagrant.box"
   box_check_update = false
   sources_list_path = "/tmp/aliyun_sources.list"
   temp_ssh_folder_path = "/tmp/tempssh"
@@ -28,7 +29,7 @@ Vagrant.configure("2") do |config|
     machine.vm.hostname = hostname
     machine.vm.post_up_message = "#{hostname}#{boot_up_message}"
     machine.vm.network "private_network", ip: "#{base_private_network_segment}10"
-    machine.vm.network "public_network", ip: "#{base_public_network_segment}78"
+    machine.vm.network "public_network", ip: "#{base_public_network_segment}78"#, bridge: ""
 
     config.vm.provider :virtualbox do |vb|
       vb.name = hostname
@@ -64,6 +65,7 @@ Vagrant.configure("2") do |config|
   #################### machine config end ####################
 
 
+  # NODE_COUNT = 2
   #################### batch config node start ####################
   # (1..NODE_COUNT).each do |i|
   #   config.vm.define "node#{i}" do |machine|
@@ -93,9 +95,9 @@ Vagrant.configure("2") do |config|
     vb.gui = false
     vb.memory = "1024"
     vb.cpus = 1
-    vb.customize ["modifyvm", :id, "--nictype1", "Am79C973"]
-    vb.customize ["modifyvm", :id, "--nictype2", "Am79C973"]
-    vb.customize ["modifyvm", :id, "--nictype3", "Am79C973"]
+    # vb.customize ["modifyvm", :id, "--nictype1", "Am79C973", "--nicpromisc1", "allow-all"]
+    vb.customize ["modifyvm", :id, "--nictype2", "Am79C973"]#, "--nicpromisc2", "allow-all"
+    vb.customize ["modifyvm", :id, "--nictype3", "virtio"]#, "--nicpromisc3", "allow-all"
   end
 
   config.vm.box_url = "#{default_box_url}"
@@ -104,7 +106,7 @@ Vagrant.configure("2") do |config|
   config.vm.provision "file", source: "#{base_data_path}ssh/.", destination: "#{temp_ssh_folder_path}"
   config.vm.provision "file", source: "#{base_data_path}key/local_key", destination: "#{temp_id_rsa_path}"
 
-  config.ssh.forward_agent    = true
+  config.ssh.forward_agent    = false
   config.ssh.insert_key       = false
   config.ssh.private_key_path = ["#{base_data_path}key/local_key"]
 
@@ -152,6 +154,21 @@ Vagrant.configure("2") do |config|
         SHELL
       end
   end
+
+  # default router
+  # config.vm.provision :shell, run: "always", privileged: true do |s|
+  #   s.inline = <<-SHELL
+  #     route add default gw #{base_public_network_segment}1
+  #     eval `route -n | awk '{ if ($8 =="enp0s3" && $2 != "0.0.0.0") print "route del default gw " $2; }'`
+  #
+  #     echo "nameserver 8.8.8.8" >> /etc/resolvconf/resolv.conf.d/base
+  #     echo "nameserver 8.8.4.4" >> /etc/resolvconf/resolv.conf.d/base
+  #     resolvconf -u
+  #
+  #     echo "shell init router done"
+  #   SHELL
+  # end
+
   #################### global machine config end ####################
 
 end
