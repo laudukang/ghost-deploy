@@ -8,7 +8,8 @@ Vagrant.configure("2") do |config|
   base_data_path = "#{base_path}data/"
   boot_up_message = ", hi laudukang"
   base_private_network_segment = "172.28.128."
-  base_public_network_segment  = "10.10.201."
+  # base_public_network_segment  = "10.10.201."
+  base_public_network_segment  = "192.168.3."
 
   default_box = "ubuntu/xenial64"
   default_box_url = "http://cloud-images.ubuntu.com/xenial/current/xenial-server-cloudimg-amd64-vagrant.box"
@@ -110,34 +111,34 @@ Vagrant.configure("2") do |config|
   config.ssh.insert_key       = false
   config.ssh.private_key_path = ["#{base_data_path}key/local_key"]
 
-  config.vm.provision :shell, privileged: false do |s|
+  config.vm.provision :shell, privileged: true do |s|
     ssh_key = File.readlines("#{base_data_path}key/local_key").first.strip
     ssh_pub_key = File.readlines("#{base_data_path}key/local_key.pub").first.strip
 
     s.inline = <<-SHELL
       echo #{ssh_pub_key} >> /home/ubuntu/.ssh/authorized_keys
-      sudo bash -c "echo #{ssh_pub_key} >> /root/.ssh/authorized_keys"
+      echo #{ssh_pub_key} >> /root/.ssh/authorized_keys
 
-      sudo bash -c "cp #{temp_id_rsa_path} /home/ubuntu/.ssh/id_rsa"
-      sudo bash -c "echo #{ssh_pub_key} >>  /home/ubuntu/.ssh/id_rsa.pub"
+      cp #{temp_id_rsa_path} /home/ubuntu/.ssh/id_rsa
+      echo #{ssh_pub_key} >>  /home/ubuntu/.ssh/id_rsa.pub
 
-      sudo bash -c "mv #{temp_id_rsa_path} /root/.ssh/id_rsa"
-      sudo bash -c "echo #{ssh_pub_key} >>  /root/.ssh/id_rsa.pub"
+      mv #{temp_id_rsa_path} /root/.ssh/id_rsa
+      echo #{ssh_pub_key} >>  /root/.ssh/id_rsa.pub
 
-      sudo bash -c "chmod 0600 /home/ubuntu/.ssh/id_rsa"
-      sudo bash -c "chmod 0644 /home/ubuntu/.ssh/id_rsa.pub"
-			sudo bash -c "chown ubuntu:ubuntu /home/ubuntu/.ssh/id_rsa*"
+      chmod 0600 /home/ubuntu/.ssh/id_rsa
+      chmod 0644 /home/ubuntu/.ssh/id_rsa.pub
+			chown ubuntu:ubuntu /home/ubuntu/.ssh/id_rsa*
 
-      sudo bash -c "chmod 0600 /root/.ssh/id_rsa"
-      sudo bash -c "chmod 0644 /root/.ssh/id_rsa.pub"
-			sudo bash -c "chown root:root /root/.ssh/id_rsa*"
+      chmod 0600 /root/.ssh/id_rsa
+      chmod 0644 /root/.ssh/id_rsa.pub
+			chown root:root /root/.ssh/id_rsa*
 
-      sudo bash -c "mv #{sources_list_path} /etc/apt/sources.list"
+      mv #{sources_list_path} /etc/apt/sources.list
 
-      sudo bash -c "mv #{temp_ssh_folder_path}/* /etc/ssh/ && rm -rf #{temp_ssh_folder_path}"
-      sudo bash -c "chmod 600 /etc/ssh/ssh_host_*key"
-      sudo bash -c "chmod 644 /etc/ssh/ssh_host_*key.pub"
-      sudo service ssh restart
+      mv #{temp_ssh_folder_path}/* /etc/ssh/ && rm -rf #{temp_ssh_folder_path}
+      chmod 600 /etc/ssh/ssh_host_*key
+      chmod 644 /etc/ssh/ssh_host_*key.pub
+      service ssh restart
 
       echo "shell init done"
     SHELL
@@ -148,7 +149,7 @@ Vagrant.configure("2") do |config|
         user_password = File.readlines("#{base_data_path}user_password").first.strip
 
         s.inline = <<-SHELL
-          sudo echo #{user_password} | sudo chpasswd
+          sudo bash -c "echo #{user_password} | chpasswd"
 
           echo "shell init user password done"
         SHELL
