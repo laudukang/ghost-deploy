@@ -95,9 +95,9 @@ Vagrant.configure("2") do |config|
     vb.gui = false
     vb.memory = "1024"
     vb.cpus = 1
-    # vb.customize ["modifyvm", :id, "--nictype1", "Am79C973", "--nicpromisc1", "allow-all"]
-    vb.customize ["modifyvm", :id, "--nictype2", "Am79C973"]#, "--nicpromisc2", "allow-all"
-    vb.customize ["modifyvm", :id, "--nictype3", "virtio"]#, "--nicpromisc3", "allow-all"
+    vb.customize ["modifyvm", :id, "--nictype1", "Am79C973", '--cableconnected1', 'on']
+    vb.customize ["modifyvm", :id, "--nictype2", "Am79C973", '--cableconnected2', 'on']#, "--nicpromisc2", "allow-all"
+    vb.customize ["modifyvm", :id, "--nictype3", "virtio", '--cableconnected3', 'on']#, "--nicpromisc3", "allow-all"
   end
 
   config.vm.box_url = "#{default_box_url}"
