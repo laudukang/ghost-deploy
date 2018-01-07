@@ -8,7 +8,7 @@ Vagrant.configure("2") do |config|
   base_data_path = "#{base_path}data/"
   boot_up_message = ", hi laudukang"
   base_private_network_segment = "172.28.128."
-  base_public_network_segment  = "10.10.201."
+  base_public_network_segment  = "192.168.1."
 
   default_box = "ubuntu/xenial64"
   default_box_url = "http://cloud-images.ubuntu.com/xenial/current/xenial-server-cloudimg-amd64-vagrant.box"
@@ -138,6 +138,11 @@ Vagrant.configure("2") do |config|
       chmod 600 /etc/ssh/ssh_host_*key
       chmod 644 /etc/ssh/ssh_host_*key.pub
       service ssh restart
+
+      apt update
+
+      sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+      chsh -s $(which zsh)
 
       echo "shell init done"
     SHELL
